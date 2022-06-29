@@ -13,8 +13,8 @@ class HTMLExtractor():
         '''
         
         driver.get(url)
-        time.sleep(3)
-        page = self.driver.page_source
+        time.sleep(4)
+        page = driver.page_source
         soup = BeautifulSoup(page, 'lxml')
 
         return soup
@@ -36,3 +36,38 @@ class HTMLExtractor():
         all_links = [link.get('href') for link in soup.find_all('a') if link.get('href') is not None]
 
         return all_links
+
+
+    def get_text_from_one_url(self, link, source, driver):
+        
+        soup = self.get_soup_from_url(driver, link)
+
+        # print(soup)
+        title = soup.title.text if soup.title else None
+        abstract = None
+        intro = None
+        conclusion = None
+        
+        if source.lower() == 'scopus':
+            abstract = self.get_scopus_abstract(soup)
+            intro = self.get_scopus_intro(soup)
+            conclusion = self.get_scopus_conclusion(soup)
+        elif source.lower() == 'acm':
+            abstract = self.get_acm_abstract(soup)
+            intro = self.get_acm_intro(soup)
+            conclusion = self.get_acm_conclusion(soup)
+        else:
+            print('Source can only be ACM or Scopus')
+
+        if abstract and intro and conclusion:
+            result = {
+                'title': title,
+                'abstract': abstract,
+                'intro': intro,
+                'conclusion': conclusion
+            }
+            return result, soup
+        else:
+            return None, soup
+
+
