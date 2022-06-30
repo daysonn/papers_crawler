@@ -1,0 +1,65 @@
+============================= test session starts ==============================
+platform linux -- Python 3.8.13, pytest-7.1.2, pluggy-1.0.0 -- /home/dayson/anaconda3/envs/papers_crawler/bin/python
+cachedir: .pytest_cache
+rootdir: /home/dayson/Documentos/Mestrado/Dissertação/Papers_Crawler/tests
+collecting ... collected 2 items
+
+TestExtractor.py::TestExtractor::testPapersLinks PASSED                  [ 50%]
+TestExtractor.py::TestExtractor::testPapersText PASSED                   [100%]
+
+=============================== warnings summary ===============================
+TestExtractor.py::TestExtractor::testPapersText
+TestExtractor.py::TestExtractor::testPapersText
+TestExtractor.py::TestExtractor::testPapersText
+TestExtractor.py::TestExtractor::testPapersText
+TestExtractor.py::TestExtractor::testPapersText
+TestExtractor.py::TestExtractor::testPapersText
+TestExtractor.py::TestExtractor::testPapersText
+TestExtractor.py::TestExtractor::testPapersText
+  /home/dayson/anaconda3/envs/papers_crawler/lib/python3.8/site-packages/bs4/element.py:784: DeprecationWarning: The 'text' argument to find()-type methods is deprecated. Use 'string' instead.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+________________________ TestExtractor.testPapersLinks _________________________
+----------------------------- Captured stderr call -----------------------------
+
+
+====== WebDriver manager ======
+Current firefox version is 101.0
+Get LATEST geckodriver version for 101.0 firefox
+Driver [/home/dayson/.wdm/drivers/geckodriver/linux64/v0.31.0/geckodriver] found in cache
+------------------------------ Captured log call -------------------------------
+INFO     WDM:logger.py:27 
+
+INFO     WDM:logger.py:27 ====== WebDriver manager ======
+INFO     WDM:logger.py:27 Current firefox version is 101.0
+INFO     WDM:logger.py:27 Get LATEST geckodriver version for 101.0 firefox
+INFO     WDM:logger.py:27 Driver [/home/dayson/.wdm/drivers/geckodriver/linux64/v0.31.0/geckodriver] found in cache
+_________________________ TestExtractor.testPapersText _________________________
+----------------------------- Captured stdout call -----------------------------
+Link 0: /science/article/pii/S136454392200048X
+Link 1: /science/article/pii/S2772390922000166
+abstract target
+Link 2: /science/article/pii/S1877050920320615
+abstract target
+Link 3: /science/article/pii/S0377221720300400
+abstract target
+----------------------------- Captured stderr call -----------------------------
+
+
+====== WebDriver manager ======
+Current firefox version is 101.0
+Get LATEST geckodriver version for 101.0 firefox
+Driver [/home/dayson/.wdm/drivers/geckodriver/linux64/v0.31.0/geckodriver] found in cache
+------------------------------ Captured log call -------------------------------
+INFO     WDM:logger.py:27 
+
+INFO     WDM:logger.py:27 ====== WebDriver manager ======
+INFO     WDM:logger.py:27 Current firefox version is 101.0
+INFO     WDM:logger.py:27 Get LATEST geckodriver version for 101.0 firefox
+INFO     WDM:logger.py:27 Driver [/home/dayson/.wdm/drivers/geckodriver/linux64/v0.31.0/geckodriver] found in cache
+=========================== short test summary info ============================
+PASSED TestExtractor.py::TestExtractor::testPapersLinks
+PASSED TestExtractor.py::TestExtractor::testPapersText
+======================== 2 passed, 8 warnings in 41.25s ========================

@@ -3,16 +3,22 @@ from selenium.webdriver.firefox.service import Service
 from webdriver_manager.firefox import GeckoDriverManager
 
 from Papers_Crawler.models.HTMLExtractor import HTMLExtractor
+#from models.HTMLExtractor import HTMLExtractor
 
 class LinkSearcher(HTMLExtractor):
+    '''
+    Classe que busca os links para artigos válidos a partir de uma query.
+    Essa classe também herda do HTMLExtractor por ser necessário abrir a página de busca
+    e encontrar os links mencionados acima.
+    '''
     def __init__ (self):
         pass
     
-    def get_links_from_query(self, query, max_limit=None):
+    def get_links_from_query(self, query, max_pages_limit=None):
         self.driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()))
 
-        acm = self.get_ACM_links_from_query(self.driver, query, max_limit)
-        scopus = self.get_Scopus_links_from_query(self.driver, query, max_limit)
+        acm = self.get_ACM_links_from_query(self.driver, query, max_pages_limit)
+        scopus = self.get_Scopus_links_from_query(self.driver, query, max_pages_limit)
         
         self.driver.quit()
         
@@ -64,7 +70,7 @@ class LinkSearcher(HTMLExtractor):
                 if max_limit == i:
                     break
 
-        return set(papers_links)
+        return list(set(papers_links))
     
     def get_valid_links_per_ACM_page(self, all_links):
         '''

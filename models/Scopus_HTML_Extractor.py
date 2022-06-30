@@ -5,6 +5,7 @@ from unidecode import unidecode
 import os
 
 from Papers_Crawler.models.HTMLExtractor import HTMLExtractor
+#from models.HTMLExtractor import HTMLExtractor
 
 
 
@@ -48,9 +49,7 @@ class Scopus_HTML_extractor(HTMLExtractor):
                 if sib.name=="h2":
                     break
                 else:
-                    #print(sib.text)
                     intro = intro + unidecode(sib.text).replace('\n', '') + ' '
-                    print('introdução target')
                     return intro
         else:
             intro = None
@@ -65,20 +64,18 @@ class Scopus_HTML_extractor(HTMLExtractor):
             for header in targets:
                 #print(header.text)
                 if 'Conclusion' in header.text:
-                    print('Achou uma conclusão')
                     for sib in header.find_next_siblings():
                         if sib.name=="h2":
                             break
                         else:
                             conclusion = conclusion + sib.text + ' '
-                            print('conclusão target')
                             return conclusion
         else:
             conclusion = None
 
         return conclusion
     
-    def get_text_from_all(self, dir_saving_path=None, maxlimit=None):
+    def get_text_from_all(self, dir_saving_path=None, maxlimit=None, verbose=False):
 
         dirname = os.path.dirname(__file__)
         saved_results = []
@@ -94,7 +91,8 @@ class Scopus_HTML_extractor(HTMLExtractor):
             if text:
                 j += 1
                 saved_results.append(text)
-                print(f'Artigos salvos: {j}')
+                if verbose:
+                    print(f'Artigos salvos: {j}')
 
             if dir_saving_path and soup:
                 
