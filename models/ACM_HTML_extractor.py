@@ -5,7 +5,7 @@ from unidecode import unidecode
 import os
 
 from Papers_Crawler.models.HTMLExtractor import HTMLExtractor
-
+#from models.HTMLExtractor import HTMLExtractor
 
 class ACM_HTML_extractor(HTMLExtractor):
     '''
@@ -91,7 +91,7 @@ class ACM_HTML_extractor(HTMLExtractor):
 
         return conclusion
 
-    def get_text_from_all(self, dir_saving_path=None, max_limit_search=None):
+    def get_text_from_all(self, dir_saving_path=None, max_limit_search=None, verbose=False):
 
         dirname = os.path.dirname(__file__)
         saved_results = []
@@ -107,6 +107,8 @@ class ACM_HTML_extractor(HTMLExtractor):
 
                 if dir_saving_path and soup:
                     j += 1
+                    if verbose:
+                        print(f'Artigos salvos: {j}')
                     saving_path = dir_saving_path + '/ACM/' + f"{link.replace('/', '_')}.txt"
                     saving_path = os.path.join(dirname, saving_path)
 

@@ -55,7 +55,7 @@ saving_path = '../resources' # os.path.join(dirname, './Resources/HTML/ACM')
 acm_papers_text = []
 
 scopus_extractor = Scopus_HTML_extractor(scopus_links)
-scopus_papers_text = scopus_extractor.get_text_from_all(saving_path, maxlimit=None)
+scopus_papers_text = scopus_extractor.get_text_from_all(saving_path, maxlimit=20)
 
 papers_text = acm_papers_text + scopus_papers_text
 
