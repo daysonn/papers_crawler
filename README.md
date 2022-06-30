@@ -1,4 +1,4 @@
-# papers_crawler
+# Papers_crawler
 Projeto para extração de texto de artigos disponibilizados em formato HTML nos repositórios Scopus e ACM.
 
 Este projeto tem como objetivo extrair abstract, introdução e conclusão de papers científicos disponibilizados em formato HTML. A partir de uma query em linguagem natural, nós remontamos a URL de busca da Scopus e da ACM para encontrar artigos que estão em formato HTML, possibilitando a extração por seção.
