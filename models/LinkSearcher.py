@@ -2,17 +2,17 @@ from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from webdriver_manager.firefox import GeckoDriverManager
 
-import HTMLExtractor
+from Papers_Crawler.models.HTMLExtractor import HTMLExtractor
 
 class LinkSearcher(HTMLExtractor):
     def __init__ (self):
         pass
     
-    def get_links_from_query(self, query):
+    def get_links_from_query(self, query, max_limit=None):
         self.driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()))
-        
-        acm = self.get_ACM_links_from_query(query)
-        scopus = self.get_Scopus_links_from_query(query)
+
+        acm = self.get_ACM_links_from_query(self.driver, query, max_limit)
+        scopus = self.get_Scopus_links_from_query(self.driver, query, max_limit)
         
         self.driver.quit()
         
@@ -28,7 +28,7 @@ class LinkSearcher(HTMLExtractor):
 
         return valid_links
     
-    def get_Scopus_links_from_query(self, query):
+    def get_Scopus_links_from_query(self, driver, query, max_limit=None):
         '''
         Função que itera sobre uma query inicial na Scopus 
         e gera uma lista de links únicos e válidos da Scopus 
@@ -45,7 +45,7 @@ class LinkSearcher(HTMLExtractor):
         while(next_page_link != None):
 
             # Busca todos os links da página
-            all_links = self.get_href_from_url(next_page_link) 
+            all_links = self.get_href_from_url(driver, next_page_link) 
             if all_links:
 
                 # Recebe uma lista de links válidos
@@ -60,29 +60,11 @@ class LinkSearcher(HTMLExtractor):
             offset += 100
             
             i += 1
-            if i>2:
-                break
+            if max_limit:
+                if max_limit == i:
+                    break
 
         return set(papers_links)
-
-    
-    def get_href_from_url(self, url):
-        '''
-        Função que recebe um driver ('plugin' de um navegador) e uma URL:
-        retorna uma lista com todos os links disponíveis na URL enviada
-        '''
-        soup = self.get_soup_from_url(url)
-        acm_ending = 'In order to show you the most relevant results, we have omitted some entries'
-        scopus_ending = 'Sorry – your search could not be run.'
-
-        for string in soup.stripped_strings:
-            if (acm_ending in string) or (scopus_ending in string):
-                print('Fim da busca. Msg: ', string)
-                return None
-    
-        all_links = [link.get('href') for link in soup.find_all('a') if link.get('href') is not None]
-
-        return all_links
     
     def get_valid_links_per_ACM_page(self, all_links):
         '''
@@ -93,7 +75,7 @@ class LinkSearcher(HTMLExtractor):
         valid_links = [link for link in all_links if "/fullHtml/" in link]   
         return valid_links
     
-    def get_ACM_links_from_query(self, query):
+    def get_ACM_links_from_query(self, driver, query, max_limit=None):
         '''
         Gera uma lista de links válidos a serem consultados a partir de uma query
         e itera sobre as páginas de resultados 
@@ -113,7 +95,7 @@ class LinkSearcher(HTMLExtractor):
         while(next_page_link != None):
 
             # Busca todos os links da página
-            all_links = self.get_href_from_url(next_page_link) 
+            all_links = self.get_href_from_url(driver, next_page_link) 
 
             if all_links:
 
@@ -130,7 +112,8 @@ class LinkSearcher(HTMLExtractor):
             next_page_link = url + page + str(offset) + page_size
             
             i += 1
-            if i>2:
-                break
+            if max_limit:
+                if i == max_limit:
+                    break
 
-        return set(papers_links)
+        return list(set(papers_links))

@@ -1,9 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from webdriver_manager.firefox import GeckoDriverManager
-import unidecode
+from unidecode import unidecode
+import os
 
-import HTMLExtractor
+from Papers_Crawler.models.HTMLExtractor import HTMLExtractor
 
 
 class ACM_HTML_extractor(HTMLExtractor):
@@ -12,8 +13,14 @@ class ACM_HTML_extractor(HTMLExtractor):
     As classes diferem entre o tipo de website por conta do formato das tags de cada uma das páginas
     O resultado final são 3 strings contendo abstract, introdução e conclusão de cada artigo
     '''
+
+    root_ACM_link = r'https://dl.acm.org'
+
+    def __init__(self, acm_links) -> None:
+        self.acm_links = acm_links
+        super().__init__()
     
-    def get_acm_abstract(soup):
+    def get_acm_abstract(self, soup):
         abstract = ''
         target = soup.find(class_="abstract")
 
@@ -28,7 +35,7 @@ class ACM_HTML_extractor(HTMLExtractor):
 
         return abstract
     
-    def get_acm_intro(soup):
+    def get_acm_intro(self, soup):
         intro = ''
         save_header = None
         targets = soup.find_all('h2')
@@ -56,7 +63,7 @@ class ACM_HTML_extractor(HTMLExtractor):
 
         return intro
     
-    def get_acm_conclusion(soup):
+    def get_acm_conclusion(self, soup):
         conclusion = ''
         save_header = None
         targets = soup.find_all('h2')
@@ -83,38 +90,32 @@ class ACM_HTML_extractor(HTMLExtractor):
             conclusion = None
 
         return conclusion
-    
-    def get_text_from_url(self, link, source):
-        
-        self.driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()))
-        
-        soup = self.get_soup_from_url(driver, link)
-        print(soup)
-        title = soup.title.text if soup.title else None
-        abstract = None
-        intro = None
-        conclusion = None
-        
-        if source.lower() == 'scopus':
-            abstract = get_scopus_abstract(soup)
-            intro = get_scopus_intro(soup)
-            conclusion = get_scopus_conclusion(soup)
-        elif source.lower() == 'acm':
-            abstract = get_acm_abstract(soup)
-            intro = get_acm_intro(soup)
-            conclusion = get_acm_conclusion(soup)
-        else:
-            print('Source can only be ACM or Scopus')
 
-        self.driver.quit()
+    def get_text_from_all(self, dir_saving_path=None, max_limit_search=None):
 
-        if abstract and intro and conclusion:
-            result = {
-                'title': title,
-                'abstract': abstract,
-                'intro': intro,
-                'conclusion': conclusion
-            }
-            return result
-        else:
-            return None
+        dirname = os.path.dirname(__file__)
+        saved_results = []
+        driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()))
+        j = 0
+        for i, link in enumerate(self.acm_links):
+            print(f'Link {i}: {link}')
+            #self.get_soup_from_url(driver, url)
+            text, soup = self.get_text_from_one_url(self.root_ACM_link + link.replace('\n', ''), 'acm', driver)
+
+            if text:
+                saved_results.append(text)
+
+                if dir_saving_path and soup:
+                    j += 1
+                    saving_path = dir_saving_path + '/ACM/' + f"{link.replace('/', '_')}.txt"
+                    saving_path = os.path.join(dirname, saving_path)
+
+                    with open(saving_path, "w") as file:
+                        file.write(str(soup))
+            if max_limit_search:
+                if j == max_limit_search:
+                    break
+        driver.quit()
+        return saved_results
+
+        
