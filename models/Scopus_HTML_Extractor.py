@@ -4,7 +4,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 from unidecode import unidecode
 import os
 
-from models.HTMLExtractor import HTMLExtractor
+from Papers_Crawler.models.HTMLExtractor import HTMLExtractor
 
 
 

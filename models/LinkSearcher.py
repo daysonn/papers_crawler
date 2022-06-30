@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from webdriver_manager.firefox import GeckoDriverManager
 
-from models.HTMLExtractor import HTMLExtractor
+from Papers_Crawler.models.HTMLExtractor import HTMLExtractor
 
 class LinkSearcher(HTMLExtractor):
     def __init__ (self):
@@ -116,4 +116,4 @@ class LinkSearcher(HTMLExtractor):
                 if i == max_limit:
                     break
 
-        return set(papers_links)
+        return list(set(papers_links))

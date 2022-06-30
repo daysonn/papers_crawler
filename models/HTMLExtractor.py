@@ -19,12 +19,12 @@ class HTMLExtractor():
 
         return soup
     
-    def get_href_from_url(self, url):
+    def get_href_from_url(self, driver, url):
         '''
         Função que recebe um driver ('plugin' de um navegador) e uma URL:
         retorna uma lista com todos os links disponíveis na URL enviada
         '''
-        soup = self.get_soup_from_url(url)
+        soup = self.get_soup_from_url(driver, url)
         acm_ending = 'In order to show you the most relevant results, we have omitted some entries'
         scopus_ending = 'Sorry – your search could not be run.'
 
